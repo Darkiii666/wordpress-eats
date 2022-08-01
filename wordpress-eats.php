@@ -14,4 +14,4 @@
  * Domain Path:       /languages
  */
 
-require_once "load.php";
+require_once "setup.php";
