@@ -9,7 +9,7 @@
     <title><?php wp_title() ?></title>
     <?php wp_head(); ?>
 </head>
-<body <?php body_class(); ?>>
+<body <?php body_class('wp-eats-body'); ?>>
 <?php wp_body_open(); ?>
 
 <header class="wp-eats__header">

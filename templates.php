@@ -5,11 +5,24 @@ add_filter("page_template", "wp_eats\override_template", 1, 1);
 function override_template($template){
     global $post;
     $load_assets = false;
-    $invoices_list_id = get_theme_mod('wp-eats-invoices-site');
-
-    if ($invoices_list_id == $post->ID) {
+    if (get_theme_mod('wp-eats-dashboard-site') == $post->ID) {
         $load_assets = true;
-        $template = WP_EATS_DIR . '/templates/invoice-list.php';
+        $template = WP_EATS_DIR . '/templates/dashboard.php';
+    } else if (get_theme_mod('wp-eats-coupons-site') == $post->ID) {
+        $load_assets = true;
+        $template = WP_EATS_DIR . '/templates/coupons.php';
+    } else if (get_theme_mod('wp-eats-invoices-site') == $post->ID) {
+        $load_assets = true;
+        $template = WP_EATS_DIR . '/templates/invoices.php';
+    } else if (get_theme_mod('wp-eats-restaurants-site') == $post->ID) {
+        $load_assets = true;
+        $template = WP_EATS_DIR . '/templates/restaurants.php';
+    } else if (get_theme_mod('wp-eats-users-site') == $post->ID) {
+        $load_assets = true;
+        $template = WP_EATS_DIR . '/templates/users.php';
+    } else if (get_theme_mod('wp-eats-orders-site') == $post->ID) {
+        $load_assets = true;
+        $template = WP_EATS_DIR . '/templates/orders.php';
     }
 
     if($load_assets) {
