@@ -1,13 +1,6 @@
 <?php
 namespace wp_eats;
 
-function get_invoice_statuses() {
-    return array(
-        "ongoing" => __("Ongoing", "wp-eats"),
-        "pending" => __("Pending", "wp-eats"),
-        "verified" => __("Verified", "wp-eats"),
-    );
-}
 
 function register_invoice_post_type(): void
 {
@@ -67,9 +60,11 @@ add_action( 'init', 'wp_eats\register_invoice_post_type' );
 
 function invoice_meta_boxes($post): void
 {
-    add_meta_box("invoice-status", __("Invoice Status", "wp-eats"), function ($post){
-        $statuses = get_invoice_statuses();
-        $current_status = get_post_meta($post->ID, "invoice-status", true);
+
+    add_meta_box("invoice-status", __("Invoice Status", "wp-eats"), function ($post, $invoice){
+        $invoice = new Invoice($post);
+        $statuses = Invoice::get_invoice_statuses();
+        $current_status = $invoice->get_invoice_status();
         echo '<select name="invoice-status" id="invoice-status">';
         foreach ($statuses as $status_id => $status_name) {
             $selected = '';
@@ -80,17 +75,11 @@ function invoice_meta_boxes($post): void
         echo '</select>';
 
     }, null, 'side');
-    add_meta_box("invoice-sender", __("Invoice Sender", "wp-eats"), function ($post){
-
+    add_meta_box("invoice-sender", __("Invoice Sender", "wp-eats"), function ($post, $invoice){
+        $invoice = new Invoice($post);
     }, null, 'side');
 }
 add_action("save_post_eats-invoice", function ($post_id, $post, $update){
-    $statuses = get_invoice_statuses();
-    if (isset($statuses[$_REQUEST['invoice-status']])) {
-        delete_post_meta($post_id, 'invoice-status');
-        update_post_meta($post_id, 'invoice-status', $_REQUEST['invoice-status']);
-    } else {
-        add_post_meta($post_id, 'invoice-status', 'ongoing', true);
-    }
-
+    $invoice = new Invoice($post);
+    $invoice->set_invoice_status($_REQUEST['invoice-status']);
 }, 10, 3);
