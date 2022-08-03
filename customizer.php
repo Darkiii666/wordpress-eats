@@ -22,7 +22,6 @@ function wp_eats_customizer($wp_customize)
         )
     );
 
-
 }
 
 

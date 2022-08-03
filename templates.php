@@ -4,10 +4,17 @@ add_filter("page_template", "wp_eats\override_template", 1, 1);
 
 function override_template($template){
     global $post;
+    $load_assets = false;
     $invoices_list_id = get_theme_mod('wp-eats-invoices-site');
 
     if ($invoices_list_id == $post->ID) {
+        $load_assets = true;
         $template = WP_EATS_DIR . '/templates/invoice-list.php';
+    }
+
+    if($load_assets) {
+        wp_enqueue_script('wp-eats-js', 'da');
+        wp_enqueue_style('wp-eats-css', WP_EATS_URL . 'assets/css/style.css', null, WP_EATS_VERSION);
     }
     return $template;
 }
