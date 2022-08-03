@@ -14,4 +14,6 @@
  * Domain Path:       /languages
  */
 
+DEFINE('WP_EATS_DIR', __DIR__);
+
 require_once "setup.php";
