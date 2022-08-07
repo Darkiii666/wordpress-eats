@@ -12,9 +12,6 @@
         <div class="wp-eats__filters wp-eats__filters--invoices">
             <div class="wp-eats__status-filters">
                 <?php
-                echo "<pre>";
-                var_dump($_REQUEST);
-                echo "</pre>";
                 $statuses = array("all" => __("All", "wp-eats"));
                 $statuses = array_merge($statuses, \wp_eats\Invoice::get_invoice_statuses());
                 if (isset($_REQUEST["invoice-status"]) && isset($statuses[$_REQUEST['invoice-status']])){
@@ -23,11 +20,10 @@
                     $current_status = "all";
                 };
                 foreach ($statuses as $status_key => $status):?>
-                    <label class="wp-eats__status-filter">
-                        <input type="radio" name="invoice_status" value="<?php echo $status_key?>"<?php if($status_key == $current_status) echo " checked"?>>
-                        <span class="wp-eats__status-filter-text"><?php echo $status?></span>
-
-                    </label>
+                    <span class="wp-eats__status-filter">
+                        <input autocomplete="off" class="btn-check" id="<?php echo "filter_status_" . esc_attr($status_key);?>" type="radio" name="invoice_status" value="<?php echo $status_key?>"<?php if($status_key == $current_status) echo " checked"?>>
+                        <label for="<?php echo "filter_status_" .  esc_attr($status_key);?>" class="btn wp-eats__status-filter-text"><?php echo $status?></label>
+                    </span>
                 <?php endforeach;?>
 
             </div>
@@ -71,19 +67,20 @@
                 </thead>
                 <tbody>
                     <?php $invoices = \wp_eats\WP_Eats::get_invoice_list();
-                    foreach ($invoices as $invoice):?>
+                    foreach ($invoices as $invoice):
+                        ?>
                     <tr>
                         <td class="wp-eats__table-data"><label><input type="checkbox" name="posts[]" value="<?php echo esc_attr($invoice->ID);?>"></label></td>
                         <td class="wp-eats__table-data"><?php echo $invoice->ID?></td>
-                        <td class="wp-eats__table-data"></td>
-                        <td class="wp-eats__table-data"></td>
-                        <td class="wp-eats__table-data"></td>
-                        <td class="wp-eats__table-data"></td>
-                        <td class="wp-eats__table-data"></td>
-                        <td class="wp-eats__table-data"></td>
-                        <td class="wp-eats__table-data"></td>
-                        <td class="wp-eats__table-data"></td>
-                        <td class="wp-eats__table-data"></td>
+                        <td class="wp-eats__table-data"><?php ?></td>
+                        <td class="wp-eats__table-data"><span class="wp-eats__status-name wp-eats__status-name--<?php echo $invoice->get_invoice_status();?>"></span><?php echo $invoice->get_invoice_status_name()?></td>
+                        <td class="wp-eats__table-data"><?php ?></td>
+                        <td class="wp-eats__table-data"><?php ?></td>
+                        <td class="wp-eats__table-data"><?php ?></td>
+                        <td class="wp-eats__table-data"><?php ?></td>
+                        <td class="wp-eats__table-data"><?php ?></td>
+                        <td class="wp-eats__table-data"><?php ?></td>
+                        <td class="wp-eats__table-data"><?php ?></td>
                     </tr>
                     <?php endforeach;?>
                 </tbody>

@@ -39,8 +39,12 @@ class WP_Eats
         // Overwrite post type
         $args["post_type"] = "eats-invoice";
         $invoice_query = new \WP_Query($args);
-
-        if ($invoice_query->have_posts()) return $invoice_query->posts;
-        else return false;
+        $invoices = array();
+        if ($invoice_query->have_posts()) {
+            foreach ($invoice_query->posts as $post) {
+                $invoices[] = new Invoice($post);
+            };
+        }
+        return $invoices;
     }
 }
