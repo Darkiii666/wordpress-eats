@@ -26,7 +26,9 @@ function override_template($template){
     }
 
     if($load_assets) {
-        wp_enqueue_script('wp-eats-js', 'da');
+        wp_enqueue_script('wp-eats-bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js', null, WP_EATS_VERSION, true);
+        wp_enqueue_script('wp-eats-js', WP_EATS_URL . 'assets/js/script.js', null, WP_EATS_VERSION, true);
+        wp_enqueue_style('wp-eats-bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', null, WP_EATS_VERSION);
         wp_enqueue_style('wp-eats-css', WP_EATS_URL . 'assets/css/style.css', null, WP_EATS_VERSION);
     }
     return $template;
