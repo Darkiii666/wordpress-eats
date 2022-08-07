@@ -1,4 +1,7 @@
-<?php include "parts/header.php";?>
+<?php use wp_eats\Invoice;
+use wp_eats\WP_Eats;
+
+include "parts/header.php";?>
 
 <main class="wp-eats__content wp-eats__content--invoices-list">
 
@@ -13,12 +16,12 @@
             <div class="wp-eats__status-filters">
                 <?php
                 $statuses = array("all" => __("All", "wp-eats"));
-                $statuses = array_merge($statuses, \wp_eats\Invoice::get_invoice_statuses());
+                $statuses = array_merge($statuses, Invoice::get_invoice_statuses());
                 if (isset($_REQUEST["invoice-status"]) && isset($statuses[$_REQUEST['invoice-status']])){
                     $current_status = $_REQUEST['invoice-status'];
                 } else {
                     $current_status = "all";
-                };
+                }
                 foreach ($statuses as $status_key => $status):?>
                     <span class="wp-eats__status-filter">
                         <input autocomplete="off" class="btn-check" id="<?php echo "filter_status_" . esc_attr($status_key);?>" type="radio" name="invoice_status" value="<?php echo $status_key?>"<?php if($status_key == $current_status) echo " checked"?>>
@@ -42,7 +45,7 @@
                 <label class="wp-eats_date-filter wp-eats_date-filter--to"><input name="date-to" type="text" value="<?php echo esc_attr($date_to)?>"></label>
             </div>
             <div class="wp-eats__search-filter">
-                <input type="text" name="search-name" value="<?php echo @esc_attr($_REQUEST['search-name'])?>" placeholder="<?php _e("Search", "wp-eats")?>">
+                <label><input type="text" name="search-name" value="<?php echo @esc_attr($_REQUEST['search-name'])?>" placeholder="<?php _e("Search", "wp-eats")?>"></label>
             </div>
             <div class="wp-eats__actions">
                 <button class="button button--mark-as-paid"><?php _e("Mark as paid")?></button>
@@ -66,8 +69,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $invoices = \wp_eats\WP_Eats::get_invoice_list();
+                    <?php $invoices = WP_Eats::get_invoice_list();
+
                     foreach ($invoices as $invoice):
+                        $dates = $invoice->get_invoice_dates();
+                        $prices = $invoice->get_invoice_prices();
                         ?>
                     <tr>
                         <td class="wp-eats__table-data"><label><input type="checkbox" name="posts[]" value="<?php echo esc_attr($invoice->ID);?>"></label></td>
@@ -83,8 +89,8 @@
                         <td class="wp-eats__table-data"><?php ?></td>
                         <td class="wp-eats__table-data"><?php ?></td>
                         <td class="wp-eats__table-data"><?php ?></td>
-                        <td class="wp-eats__table-data"><?php ?></td>
-                        <td class="wp-eats__table-data"><?php ?></td>
+                        <td class="wp-eats__table-data">20</td>
+                        <td class="wp-eats__table-data"><a href=""><img src="<?php  ?>" alt="<?php _e("Download icon", "wp-eats")?>"></a></td>
                     </tr>
                     <?php endforeach;?>
                 </tbody>

@@ -96,9 +96,9 @@ function invoice_meta_boxes($post): void
 
     add_meta_box("invoice-fees", __("Fees", "wp-eats"), function ($post){
         $invoice = new Invoice($post);
-        echo '<p><label>'. __("Total", "wp-eats") .': <input type="text" name="total" value=""></label></p>';
-        echo '<p><label>'. __("Fees", "wp-eats") .': <input type="text" name="fees" value=""></label></p>';
-        echo '<p><label>'. __("Transfer", "wp-eats") .': <input type="text" name="transfer" value=""></label></p>';
+        echo '<p><label>'. __("Total", "wp-eats") .': <input type="text" name="price-total" value=""></label></p>';
+        echo '<p><label>'. __("Fees", "wp-eats") .': <input type="text" name="price-fees" value=""></label></p>';
+        echo '<p><label>'. __("Transfer", "wp-eats") .': <input type="text" name="price-transfer" value=""></label></p>';
         echo '<p><label>'. __("Orders", "wp-eats") .': <input type="text" name="orders" value=""></label></p>';
     }, null);
 }
@@ -106,4 +106,6 @@ add_action("save_post_eats-invoice", function ($post_id, $post, $update){
     $invoice = new Invoice($post);
     $invoice->set_invoice_status($_REQUEST['invoice-status']);
     $invoice->set_company($_REQUEST['invoice-sender']);
+    $invoice->set_invoice_dates($_REQUEST['date-from'], $_REQUEST['date-to']);
+    $invoice->set_invoice_prices($_REQUEST['price-total'], $_REQUEST['price-fees'], $_REQUEST['price-transfer']);
 }, 10, 3);

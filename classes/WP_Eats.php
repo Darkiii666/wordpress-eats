@@ -4,6 +4,9 @@ namespace wp_eats;
 
 class WP_Eats
 {
+    static function get_currency(): string {
+        return "$";
+    }
     static function get_endpoints(): array {
         return array(
             "wp-eats-dashboard-site",

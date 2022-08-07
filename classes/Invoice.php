@@ -43,8 +43,48 @@ class Invoice
             add_post_meta($this->post->ID, 'company-id', 'null', true);
         }
     }
-    public function set_invoice_dates($date_from, $date_to) {
+    public function set_invoice_dates($date_from, $date_to): void
+    {
+        if (strtotime($date_from) && strtotime($date_to)) {
+            // TODO more complex date validation
+            delete_post_meta($this->post->ID, 'date-from');
+            update_post_meta($this->post->ID, 'date-from', strtotime($date_from));
 
+            delete_post_meta($this->post->ID, 'date-to');
+            update_post_meta($this->post->ID, 'date-to', strtotime($date_to));
+        }
+    }
+    public function get_invoice_dates($date_format = "Y/m/d"): array
+    {
+        $date_from = date($date_format, get_post_meta($this->post->ID, 'date-from', true));
+        $date_to = date($date_format, get_post_meta($this->post->ID, 'date-to', true));
+        return array(
+            'date_from' => $date_from,
+            'date_to' => $date_to,
+        );
+    }
+    public function set_invoice_prices($total, $fees, $transfer): void
+    {
+        if (is_numeric($total) && is_numeric($fees) && is_numeric($transfer)){
+            delete_post_meta($this->post->ID, 'price-total');
+            update_post_meta($this->post->ID, 'price-total', strtotime($total));
+
+            delete_post_meta($this->post->ID, 'price-fees');
+            update_post_meta($this->post->ID, 'price-fees', strtotime($fees));
+
+            delete_post_meta($this->post->ID, 'price-transfer');
+            update_post_meta($this->post->ID, 'price-transfer', strtotime($transfer));
+        }
+    }
+    public function get_invoice_prices(): array {
+        $price_total = get_post_meta($this->post->ID, 'price-total', true);
+        $price_fees = get_post_meta($this->post->ID, 'price-fees', true);
+        $price_transfer = get_post_meta($this->post->ID, 'price-transfer', true);
+        return array(
+            "total" => $price_total,
+            "fees" => $price_fees,
+            "transfer" => $price_transfer
+        );
     }
     public function __construct(\WP_Post | int $post) {
         if ($post instanceof \WP_Post) {
