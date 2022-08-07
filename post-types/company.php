@@ -65,6 +65,6 @@ function company_meta_boxes($post): void
 {
 
 }
-add_action("save_post_eats-Company", function ($post_id, $post, $update){
+add_action("save_post_eats-company", function ($post_id, $post, $update){
 
 }, 10, 3);

@@ -72,7 +72,11 @@
                     <tr>
                         <td class="wp-eats__table-data"><label><input type="checkbox" name="posts[]" value="<?php echo esc_attr($invoice->ID);?>"></label></td>
                         <td class="wp-eats__table-data"><?php echo $invoice->ID?></td>
-                        <td class="wp-eats__table-data"><?php ?></td>
+                        <td class="wp-eats__table-data wp-eats__table-data--company">
+                            <?php $company = get_post($invoice->get_company()); ?>
+                            <div class="wp-eats__company-image"><?php echo get_the_post_thumbnail($company, 'company-thumbnail')?></div>
+                            <div class="wp-eats__company-name"><?php echo $company->post_title?></div>
+                        </td>
                         <td class="wp-eats__table-data"><span class="wp-eats__status-name wp-eats__status-name--<?php echo $invoice->get_invoice_status();?>"></span><?php echo $invoice->get_invoice_status_name()?></td>
                         <td class="wp-eats__table-data"><?php ?></td>
                         <td class="wp-eats__table-data"><?php ?></td>

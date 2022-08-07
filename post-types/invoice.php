@@ -61,7 +61,7 @@ add_action( 'init', 'wp_eats\register_invoice_post_type' );
 function invoice_meta_boxes($post): void
 {
 
-    add_meta_box("invoice-status", __("Invoice Status", "wp-eats"), function ($post, $invoice){
+    add_meta_box("invoice-status", __("Invoice Status", "wp-eats"), function ($post){
         $invoice = new Invoice($post);
         $statuses = Invoice::get_invoice_statuses();
         $current_status = $invoice->get_invoice_status();
@@ -75,11 +75,35 @@ function invoice_meta_boxes($post): void
         echo '</select>';
 
     }, null, 'side');
-    add_meta_box("invoice-sender", __("Invoice Sender", "wp-eats"), function ($post, $invoice){
+    add_meta_box("invoice-sender", __("Invoice Sender", "wp-eats"), function ($post){
         $invoice = new Invoice($post);
+        $companies = WP_Eats::get_companies();
+        $current_company = $invoice->get_company();
+        echo '<select name="invoice-sender" id="invoice-sender">';
+            echo '<option value="">' . __("Select Company", "wp-eats") . '</option>';
+            foreach ($companies as $company) {
+                $selected = '';
+                if ($current_company == $company->ID) $selected = ' selected="true"';
+                echo '<option value="' . esc_attr($company->ID) .'"' . $selected .'>' . $company->post_title . '</option>';
+            }
+        echo '</select>';
     }, null, 'side');
+    add_meta_box("invoice-dates", __("Dates", "wp-eats"), function ($post){
+        $invoice = new Invoice($post);
+        echo '<p><label>'. __("From Date", "wp-eats") .': <input type="date" name="from-date" value=""></label></p>';
+        echo '<p><label>'. __("End Date", "wp-eats") .': <input type="date" name="end-date" value=""></label></p>';
+    }, null);
+
+    add_meta_box("invoice-fees", __("Fees", "wp-eats"), function ($post){
+        $invoice = new Invoice($post);
+        echo '<p><label>'. __("Total", "wp-eats") .': <input type="text" name="total" value=""></label></p>';
+        echo '<p><label>'. __("Fees", "wp-eats") .': <input type="text" name="fees" value=""></label></p>';
+        echo '<p><label>'. __("Transfer", "wp-eats") .': <input type="text" name="transfer" value=""></label></p>';
+        echo '<p><label>'. __("Orders", "wp-eats") .': <input type="text" name="orders" value=""></label></p>';
+    }, null);
 }
 add_action("save_post_eats-invoice", function ($post_id, $post, $update){
     $invoice = new Invoice($post);
     $invoice->set_invoice_status($_REQUEST['invoice-status']);
+    $invoice->set_company($_REQUEST['invoice-sender']);
 }, 10, 3);

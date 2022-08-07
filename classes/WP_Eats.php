@@ -47,4 +47,15 @@ class WP_Eats
         }
         return $invoices;
     }
+    static function get_companies(): array{
+        $companies = array();
+
+        $companies_query = new \WP_Query(array(
+            "post_type" => "eats-company",
+            "posts_per_page" => -1,
+        ));
+        if ($companies_query->have_posts()) $companies = $companies_query->posts;
+        return $companies;
+
+    }
 }

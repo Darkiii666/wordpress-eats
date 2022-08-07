@@ -30,7 +30,22 @@ class Invoice
             add_post_meta($this->post->ID, 'invoice-status', 'ongoing', true);
         }
     }
+    public function get_company(){
+        return get_post_meta($this->post->ID, 'company-id', true);
+    }
+    public function set_company($company_id): void
+    {
+        // TODO Verify if ID exists and is company post type
+        if (is_numeric($company_id)) {
+            delete_post_meta($this->post->ID, 'company-id');
+            update_post_meta($this->post->ID, 'company-id', $company_id);
+        } else {
+            add_post_meta($this->post->ID, 'company-id', 'null', true);
+        }
+    }
+    public function set_invoice_dates($date_from, $date_to) {
 
+    }
     public function __construct(\WP_Post | int $post) {
         if ($post instanceof \WP_Post) {
             $this->post = $post;
