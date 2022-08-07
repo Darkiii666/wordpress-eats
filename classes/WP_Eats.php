@@ -29,4 +29,18 @@ class WP_Eats
         }
         return $pages;
     }
+    static function get_invoice_list($args = array()): array|bool
+    {
+        $defaults = array(
+            "posts_per_page" => 15,
+        );
+
+        $args = wp_parse_args($args, $defaults);
+        // Overwrite post type
+        $args["post_type"] = "eats-invoice";
+        $invoice_query = new \WP_Query($args);
+
+        if ($invoice_query->have_posts()) return $invoice_query->posts;
+        else return false;
+    }
 }
