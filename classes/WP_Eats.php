@@ -61,4 +61,16 @@ class WP_Eats
         return $companies;
 
     }
+    static function parse_invoices_list_request($request): array {
+        $args = array();
+
+        return $args;
+    }
+    static function get_format_date(): string {
+        //TODO options for setting custom format
+        return "Y/m/d";
+    }
+    static function format_price(string $price): string {
+        return $price . self::get_currency();
+    }
 }

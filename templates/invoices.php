@@ -36,8 +36,8 @@ include "parts/header.php";?>
                     $date_from = $_REQUEST["date-from"];
                     $date_to = $_REQUEST["date-to"];
                 } else {
-                    $date_from = date("Y-m-d");
-                    $date_to = date("Y-m-d", strtotime('midnight +30 day', time()));
+                    $date_from = date(WP_Eats::get_format_date());
+                    $date_to = date(WP_Eats::get_format_date(), strtotime('midnight +30 day', time()));
                 }
                 ?>
                 <label class="wp-eats_date-filter wp-eats_date-filter--from"><input name="date-from" type="text" value="<?php echo esc_attr($date_from)?>"></label>
@@ -69,10 +69,13 @@ include "parts/header.php";?>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $invoices = WP_Eats::get_invoice_list();
+                    <?php
+                    if (isset($_REQUEST)) $invoice_args = WP_Eats::parse_invoices_list_request($_REQUEST);
+                    else $invoice_args = array();
+                    $invoices = WP_Eats::get_invoice_list($invoice_args);
 
                     foreach ($invoices as $invoice):
-                        $dates = $invoice->get_invoice_dates();
+                        $dates = $invoice->get_invoice_dates(WP_Eats::get_format_date());
                         $prices = $invoice->get_invoice_prices();
                         ?>
                     <tr>
@@ -84,13 +87,13 @@ include "parts/header.php";?>
                             <div class="wp-eats__company-name"><?php echo $company->post_title?></div>
                         </td>
                         <td class="wp-eats__table-data"><span class="wp-eats__status-name wp-eats__status-name--<?php echo $invoice->get_invoice_status();?>"></span><?php echo $invoice->get_invoice_status_name()?></td>
-                        <td class="wp-eats__table-data"><?php ?></td>
-                        <td class="wp-eats__table-data"><?php ?></td>
-                        <td class="wp-eats__table-data"><?php ?></td>
-                        <td class="wp-eats__table-data"><?php ?></td>
-                        <td class="wp-eats__table-data"><?php ?></td>
-                        <td class="wp-eats__table-data">20</td>
-                        <td class="wp-eats__table-data"><a href=""><img src="<?php  ?>" alt="<?php _e("Download icon", "wp-eats")?>"></a></td>
+                        <td class="wp-eats__table-data"><?php echo $dates['start_date']?></td>
+                        <td class="wp-eats__table-data"><?php echo $dates['end_date'] ?></td>
+                        <td class="wp-eats__table-data"><?php echo WP_Eats::format_price($prices['total']) ?></td>
+                        <td class="wp-eats__table-data"><?php echo WP_Eats::format_price($prices['fees']) ?></td>
+                        <td class="wp-eats__table-data"><?php echo WP_Eats::format_price($prices['transfer']) ?></td>
+                        <td class="wp-eats__table-data"><?php // for now hardcoded ?> 20</td>
+                        <td class="wp-eats__table-data"><a href=""><img src="<?php  ?>" alt="<?php /* TODO download PDF with Invoice */_e("Download icon", "wp-eats")?>"></a></td>
                     </tr>
                     <?php endforeach;?>
                 </tbody>
