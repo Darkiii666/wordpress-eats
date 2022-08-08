@@ -44,6 +44,7 @@
   border-radius: 5px;
   table {
     border: 0;
+    margin: 0;
   }
   thead {
     tr {
@@ -60,17 +61,11 @@
         font-weight: 300;
         line-height: 1.5;
       }
-      input {
-        margin-top: .35rem;
-      }
     }
   }
   tbody {
     tr {
       border-bottom: 1px #e2e4e3 solid;
-      &:last-child {
-        border-bottom: 0;
-      }
       .wp-eats__table-data {
         border-bottom: 0;
         font-size: 15px;
@@ -111,7 +106,48 @@
       border: 0;
       td {
         border: 0;
+        padding: 0;
       }
+    }
+  }
+  .wp-eats__table-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 25px;
+    text-transform: uppercase;
+    .wp-eats__table--page-counter {
+      font-size: 12px;
+    }
+    .wp-eats__table-pagination {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      border: 1px #e2e4e3 solid;
+      border-radius: 5px;
+      > span,
+      > a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #9b9b9b;
+        width: 38px;
+        height: 35px;
+        &:not(:last-child) {
+          border-right: 1px #e2e4e3 solid;
+        }
+        &.current {
+          color: #000;
+          background: #f2f2f2;
+        }
+      }
+    }
+  }
+  .wp-eats__checkbox-wrap {
+    font-size: 25px !important;
+    input {
+      border-radius: 4px;
     }
   }
 }

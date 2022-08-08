@@ -74,7 +74,7 @@ include "parts/header.php";?>
             <table class="table">
                 <thead>
                     <tr>
-                        <th scope="col">
+                        <th scope="col" class="wp-eats__checkbox-wrap">
                             <input class="form-check-input" type="checkbox" value="" id="selectAll">
                             <label class="form-check-label" for="selectAll"></label>
                         </th>
@@ -102,7 +102,7 @@ include "parts/header.php";?>
                         $prices = $invoice->get_invoice_prices();
                         ?>
                     <tr>
-                        <td class="wp-eats__table-data">
+                        <td class="wp-eats__table-data wp-eats__table-data--checkbox wp-eats__checkbox-wrap">
                             <input class="form-check-input" name="posts[]" type="checkbox" value="<?php echo esc_attr($invoice->ID);?>" id="checkbox-<?php echo esc_attr($invoice->ID);?>">
                             <label class="form-check-label" for="checkbox-<?php echo esc_attr($invoice->ID);?>"></label>
                         </td>
@@ -148,12 +148,28 @@ include "parts/header.php";?>
                                     'end_size'     => 2,
                                     'mid_size'     => 1,
                                     'prev_next'    => true,
-                                    'prev_text'    => sprintf( '<i></i> %1$s', __( 'Prev', 'text-domain' ) ),
-                                    'next_text'    => sprintf( '%1$s <i></i>', __( 'Next', 'text-domain' ) ),
+                                    'prev_text'    => sprintf( '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+</svg>'),
+                                    'next_text'    => sprintf( '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+</svg>' ),
                                     'add_args'     => true,
                                     'add_fragment' => '',
                                 ) );
+                                if ($paged < 2):?>
+                                    <span class="prev page-numbers"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"></path>
+                                        </svg></span>
+                                <?php
+                                endif;
                                 echo $pagination;
+                                if ($paged == $invoices_query->max_num_pages):?>
+                                    <span class="next page-numbers"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"></path>
+                                        </svg></span>
+                                <?php
+                                endif;
                                 ?>
                             </div>
                         </div>
