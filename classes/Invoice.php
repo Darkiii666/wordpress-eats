@@ -43,37 +43,41 @@ class Invoice
             add_post_meta($this->post->ID, 'company-id', 'null', true);
         }
     }
-    public function set_invoice_dates($date_from, $date_to): void
+    public function set_invoice_dates($start_date, $end_date): void
     {
-        if (strtotime($date_from) && strtotime($date_to)) {
+        if (strtotime($start_date) && strtotime($end_date)) {
             // TODO more complex date validation
-            delete_post_meta($this->post->ID, 'date-from');
-            update_post_meta($this->post->ID, 'date-from', strtotime($date_from));
+            delete_post_meta($this->post->ID, 'start-date');
+            update_post_meta($this->post->ID, 'start-date', strtotime($start_date));
 
-            delete_post_meta($this->post->ID, 'date-to');
-            update_post_meta($this->post->ID, 'date-to', strtotime($date_to));
+            delete_post_meta($this->post->ID, 'end-date');
+            update_post_meta($this->post->ID, 'end-date', strtotime($end_date));
         }
     }
     public function get_invoice_dates($date_format = "Y/m/d"): array
     {
-        $date_from = date($date_format, get_post_meta($this->post->ID, 'date-from', true));
-        $date_to = date($date_format, get_post_meta($this->post->ID, 'date-to', true));
+        $start_date = get_post_meta($this->post->ID, 'start-date', true);
+        if (is_numeric($start_date)) $start_date = date($date_format, $start_date);
+        $end_date = get_post_meta($this->post->ID, 'end-date', true);
+        if (is_numeric($end_date)) $end_date = date($date_format, $end_date);
         return array(
-            'date_from' => $date_from,
-            'date_to' => $date_to,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
         );
     }
     public function set_invoice_prices($total, $fees, $transfer): void
     {
+
         if (is_numeric($total) && is_numeric($fees) && is_numeric($transfer)){
+
             delete_post_meta($this->post->ID, 'price-total');
-            update_post_meta($this->post->ID, 'price-total', strtotime($total));
+            update_post_meta($this->post->ID, 'price-total', $total);
 
             delete_post_meta($this->post->ID, 'price-fees');
-            update_post_meta($this->post->ID, 'price-fees', strtotime($fees));
+            update_post_meta($this->post->ID, 'price-fees', $fees);
 
             delete_post_meta($this->post->ID, 'price-transfer');
-            update_post_meta($this->post->ID, 'price-transfer', strtotime($transfer));
+            update_post_meta($this->post->ID, 'price-transfer', $transfer);
         }
     }
     public function get_invoice_prices(): array {

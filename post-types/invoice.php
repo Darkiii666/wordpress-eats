@@ -90,22 +90,24 @@ function invoice_meta_boxes($post): void
     }, null, 'side');
     add_meta_box("invoice-dates", __("Dates", "wp-eats"), function ($post){
         $invoice = new Invoice($post);
-        echo '<p><label>'. __("From Date", "wp-eats") .': <input type="date" name="from-date" value=""></label></p>';
-        echo '<p><label>'. __("End Date", "wp-eats") .': <input type="date" name="end-date" value=""></label></p>';
+        $dates = $invoice->get_invoice_dates('Y-m-d');
+        echo '<p><label>'. __("Start Date", "wp-eats") .': <input type="date" name="start-date" value=' . $dates['start_date'] .'></label></p>';
+        echo '<p><label>'. __("End Date", "wp-eats") .': <input type="date" name="end-date" value="'. $dates['end_date'] .'"></label></p>';
     }, null);
 
     add_meta_box("invoice-fees", __("Fees", "wp-eats"), function ($post){
         $invoice = new Invoice($post);
-        echo '<p><label>'. __("Total", "wp-eats") .': <input type="text" name="price-total" value=""></label></p>';
-        echo '<p><label>'. __("Fees", "wp-eats") .': <input type="text" name="price-fees" value=""></label></p>';
-        echo '<p><label>'. __("Transfer", "wp-eats") .': <input type="text" name="price-transfer" value=""></label></p>';
-        echo '<p><label>'. __("Orders", "wp-eats") .': <input type="text" name="orders" value=""></label></p>';
+        $prices = $invoice->get_invoice_prices();
+        echo '<p><label>'. __("Total", "wp-eats") .': <input type="text" name="price-total" value="'. $prices['total'] .'"></label></p>';
+        echo '<p><label>'. __("Fees", "wp-eats") .': <input type="text" name="price-fees" value="'. $prices['fees'] .'"></label></p>';
+        echo '<p><label>'. __("Transfer", "wp-eats") .': <input type="text" name="price-transfer" value="'. $prices['transfer'] .'"></label></p>';
+        echo '<p><label>'. __("Orders", "wp-eats") .': <input type="text" name="orders" value="'. '' .'"></label></p>';
     }, null);
 }
 add_action("save_post_eats-invoice", function ($post_id, $post, $update){
     $invoice = new Invoice($post);
     $invoice->set_invoice_status($_REQUEST['invoice-status']);
     $invoice->set_company($_REQUEST['invoice-sender']);
-    $invoice->set_invoice_dates($_REQUEST['date-from'], $_REQUEST['date-to']);
+    $invoice->set_invoice_dates($_REQUEST['start-date'], $_REQUEST['end-date']);
     $invoice->set_invoice_prices($_REQUEST['price-total'], $_REQUEST['price-fees'], $_REQUEST['price-transfer']);
 }, 10, 3);
