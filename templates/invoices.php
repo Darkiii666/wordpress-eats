@@ -12,8 +12,8 @@ include "parts/header.php";?>
         <?php wp_nonce_field( 'wp_eats_invoice_list', 'wp_eats_nonce' );
         ?>
 
-        <div class="wp-eats__filters wp-eats__filters--invoices row my-3 g-3">
-            <div class="wp-eats__status-filters col col-md-5">
+        <div class="wp-eats__filters wp-eats__filters--invoices row my-3 g-3 align-items-end">
+            <div class="wp-eats__status-filters col col-md-4 flex-fill align-self-start">
                 <?php
                 $statuses = array("all" => __("All", "wp-eats"));
                 $statuses = array_merge($statuses, Invoice::get_invoice_statuses());
@@ -42,10 +42,10 @@ include "parts/header.php";?>
                 }
                 ?>
                 <div class="input-group wp-eats__date-filters-wrap">
-                    <span class="input-group-text" id="basic-addon1">
+                    <span class="input-group-text">
                         <span class="me-2 lh-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
-  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
+  <path fill="#6c7481" d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
 </svg>
                         </span>
                          <?php _ex("From", "Invoices from date", "wp-eats")?></span>
@@ -55,13 +55,22 @@ include "parts/header.php";?>
 
             </div>
             <div class="wp-eats__search-filter col">
-                <label><input class="form-control" type="text" name="search-name" value="<?php echo @esc_attr($_REQUEST['search-name'])?>" placeholder="<?php _e("Search", "wp-eats")?>"></label>
+                <div class="input-group">
+
+
+                <span class="input-group-text bg-white pe-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+  <path fill="#6c7481" d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+</svg>
+                           </span>
+                <input class="form-control border-start-0" type="text" name="search-name" value="<?php echo @esc_attr($_REQUEST['search-name'])?>" placeholder="<?php _e("Search", "wp-eats")?>">
+                </div>
             </div>
             <div class="wp-eats__actions col">
-                <button class="btn btn-primary button button--mark-as-paid border border-0"><?php _e("Mark as paid")?></button>
+                <button class="btn btn-primary button button--mark-as-paid"><?php _e("Mark as paid")?></button>
             </div>
         </div>
-        <div class="wp-eats__list wp-eats__list--invoices row">
+        <div class="wp-eats__list wp-eats__list--invoices">
             <table class="table">
                 <thead>
                     <tr>
@@ -85,9 +94,10 @@ include "parts/header.php";?>
                     <?php
                     if (isset($_REQUEST)) $invoice_args = WP_Eats::parse_invoices_list_request($_REQUEST);
                     else $invoice_args = array();
-                    $invoices = WP_Eats::get_invoice_list($invoice_args);
-
+                    $invoices_query = WP_Eats::get_invoice_list($invoice_args);
+                    $invoices = $invoices_query->posts;
                     foreach ($invoices as $invoice):
+                        $invoice = new Invoice($invoice);
                         $dates = $invoice->get_invoice_dates(WP_Eats::get_format_date());
                         $prices = $invoice->get_invoice_prices();
                         ?>
@@ -96,13 +106,13 @@ include "parts/header.php";?>
                             <input class="form-check-input" name="posts[]" type="checkbox" value="<?php echo esc_attr($invoice->ID);?>" id="checkbox-<?php echo esc_attr($invoice->ID);?>">
                             <label class="form-check-label" for="checkbox-<?php echo esc_attr($invoice->ID);?>"></label>
                         </td>
-                        <td class="wp-eats__table-data"><?php echo $invoice->ID?></td>
+                        <td class="wp-eats__table-data">#<?php echo $invoice->ID?></td>
                         <td class="wp-eats__table-data wp-eats__table-data--company">
                             <?php $company = get_post($invoice->get_company()); ?>
                             <div class="wp-eats__company-image"><?php echo get_the_post_thumbnail($company, 'company-thumbnail')?></div>
                             <div class="wp-eats__company-name"><?php echo $company->post_title?></div>
                         </td>
-                        <td class="wp-eats__table-data"><span class="wp-eats__status-name wp-eats__status-name--<?php echo $invoice->get_invoice_status();?>"></span><?php echo $invoice->get_invoice_status_name()?></td>
+                        <td class="wp-eats__table-data"><span class="wp-eats__status-name wp-eats__status-name--<?php echo $invoice->get_invoice_status();?>"><?php echo $invoice->get_invoice_status_name()?></span></td>
                         <td class="wp-eats__table-data"><?php echo $dates['start_date']?></td>
                         <td class="wp-eats__table-data"><?php echo $dates['end_date'] ?></td>
                         <td class="wp-eats__table-data"><?php echo WP_Eats::format_price($prices['total']) ?></td>
@@ -116,6 +126,43 @@ include "parts/header.php";?>
                     </tr>
                     <?php endforeach;?>
                 </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="15">
+                        <div class="wp-eats__table-footer">
+                            <div class="wp-eats__table--page-counter">
+                                <?php
+                                $paged = get_query_var('paged');
+                                if ($paged < 2) $paged = 1;
+                                echo __("Page", "wp-eats") . ' ' . $paged . ' ' . __("of", "wp-eats") . ' ' . $invoices_query->max_num_pages;
+                                ;?>
+                            </div>
+                            <div class="wp-eats__table-pagination">
+                                <?php $pagination = paginate_links( array(
+                                    'base'         => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
+                                    'total'        => $invoices_query->max_num_pages,
+                                    'current'      => max( 1, get_query_var( 'paged' ) ),
+                                    'format'       => '?paged=%#%',
+                                    'show_all'     => true,
+                                    'type'         => 'plain',
+                                    'end_size'     => 2,
+                                    'mid_size'     => 1,
+                                    'prev_next'    => true,
+                                    'prev_text'    => sprintf( '<i></i> %1$s', __( 'Prev', 'text-domain' ) ),
+                                    'next_text'    => sprintf( '%1$s <i></i>', __( 'Next', 'text-domain' ) ),
+                                    'add_args'     => true,
+                                    'add_fragment' => '',
+                                ) );
+                                echo $pagination;
+                                ?>
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+
+
+                </tfoot>
             </table>
         </div>
     </form>

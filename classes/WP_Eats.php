@@ -32,7 +32,7 @@ class WP_Eats
         }
         return $pages;
     }
-    static function get_invoice_list($args = array()): array|bool
+    static function get_invoice_list($args = array()): \WP_Query
     {
         $defaults = array(
             "posts_per_page" => 15,
@@ -41,14 +41,7 @@ class WP_Eats
         $args = wp_parse_args($args, $defaults);
         // Overwrite post type
         $args["post_type"] = "eats-invoice";
-        $invoice_query = new \WP_Query($args);
-        $invoices = array();
-        if ($invoice_query->have_posts()) {
-            foreach ($invoice_query->posts as $post) {
-                $invoices[] = new Invoice($post);
-            };
-        }
-        return $invoices;
+        return new \WP_Query($args);
     }
     static function get_companies(): array{
         $companies = array();
@@ -63,7 +56,7 @@ class WP_Eats
     }
     static function parse_invoices_list_request($request): array {
         $args = array();
-
+        $args['posts_per_page'] = 2;
         return $args;
     }
     static function get_format_date(): string {

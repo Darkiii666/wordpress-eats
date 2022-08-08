@@ -34,19 +34,84 @@
   .button {
     &.button--mark-as-paid {
       background: #ff9600;
+      border-color: #ff9600;
     }
   }
 }
 .wp-eats__list {
+  background: #fff;
+  border: 1px #e2e4e3 solid;
+  border-radius: 5px;
   table {
-    background: #fff;
-    border: 1px #e2e4e3 solid;
-    border-radius: 5px;
-    border-collapse: separate;
+    border: 0;
   }
   thead {
+    tr {
+      border-bottom: 1px #e2e4e3 solid;
+    }
     th {
-
+      border-bottom: 0;
+      vertical-align: middle;
+      padding: .8rem .5rem;
+      &:not(:first-child) {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: #6c7481;
+        font-weight: 300;
+        line-height: 1.5;
+      }
+      input {
+        margin-top: .35rem;
+      }
+    }
+  }
+  tbody {
+    tr {
+      border-bottom: 1px #e2e4e3 solid;
+      &:last-child {
+        border-bottom: 0;
+      }
+      .wp-eats__table-data {
+        border-bottom: 0;
+        font-size: 15px;
+        font-weight: 400;
+        vertical-align: middle;
+        color: #333;
+        &.wp-eats__table-data--company {
+          font-weight: 400;
+          display: flex;
+          align-items: center;
+          color: #000;
+          .wp-eats__company-image {
+            flex-shrink: 0;
+            margin-right: 10px;
+          }
+        }
+        .wp-eats__status-name {
+          display: inline-block;
+          background: #e6e6eb;
+          padding: 4px 10px;
+          border-radius: 9999px;
+          text-transform: uppercase;
+          font-size:12px;
+          &.wp-eats__status-name--pending {
+            background: #ff9600;
+            color: #fff;
+          }
+          &.wp-eats__status-name--verified {
+            background: #48c293;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+  tfoot {
+    tr {
+      border: 0;
+      td {
+        border: 0;
+      }
     }
   }
 }
