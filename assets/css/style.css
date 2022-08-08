@@ -145,4 +145,24 @@ select {
   line-height: 1.2;
   font-weight: 400;
 }
+.wp-eats__filters .wp-eats__status-filter label {
+  color: #6c7481;
+  text-transform: uppercase;
+}
+.wp-eats__filters .wp-eats__status-filter input:checked + label {
+  background: #6c7481;
+  color: #fff;
+}
+.wp-eats__filters .wp-eats__date-filters {
+  min-width: 325px;
+}
+.wp-eats__filters .button.button--mark-as-paid {
+  background: #ff9600;
+}
+.wp-eats__list table {
+  background: #fff;
+  border: 1px #e2e4e3 solid;
+  border-radius: 5px;
+  border-collapse: separate;
+}
 /*# sourceMappingURL=style.css.map */
