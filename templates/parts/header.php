@@ -23,4 +23,7 @@
             <a href="<?php echo get_permalink($nav_link)?>" class="wp-eats__nav-item<?php echo $current;?>"><?php echo get_the_title($nav_link)?></a>
         <?php endforeach;?>
     </nav>
+    <div class="wp-eats__user-name">
+        <?php echo "Wallace Huo"?>
+    </div>
 </header>
