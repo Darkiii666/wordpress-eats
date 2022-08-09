@@ -30,7 +30,7 @@ function override_template($template){
         wp_enqueue_script('wp-eats-datepicker-js', 'https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/js/datepicker-full.min.js', null, WP_EATS_VERSION, true);
         wp_enqueue_script('wp-eats-js', WP_EATS_URL . 'assets/js/script.js', null, WP_EATS_VERSION, true);
         wp_enqueue_style('wp-eats-bootstrap-css', 'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css', null, WP_EATS_VERSION);
-        wp_enqueue_style('wp-eats-datepicker-css', 'https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker-bs5.min.css', null, WP_EATS_VERSION);
+        wp_enqueue_style('wp-eats-datepicker-css', 'https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.2.0/dist/css/datepicker.min.css', null, WP_EATS_VERSION);
         wp_enqueue_style('wp-eats-css', WP_EATS_URL . 'assets/css/style.css', null, WP_EATS_VERSION);
     }
     return $template;

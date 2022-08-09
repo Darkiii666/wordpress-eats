@@ -3,19 +3,22 @@
         <?php
         $paged = get_query_var('paged');
         if ($paged < 2) $paged = 1;
-        echo __("Page", "wp-eats") . ' ' . $paged . ' ' . __("of", "wp-eats") . ' ' . $invoices_query->max_num_pages;
+        $max_pages = $invoices_query->max_num_pages;
+        if ($max_pages < 1) $max_pages = 1;
+        echo __("Page", "wp-eats") . ' ' . $paged . ' ' . __("of", "wp-eats") . ' ' . $max_pages;
         ;?>
     </div>
+    <?php if ($max_pages > 1): ?>
     <div class="wp-eats__table-pagination">
         <?php $pagination = paginate_links( array(
             'base'         => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
             'total'        => $invoices_query->max_num_pages,
             'current'      => max( 1, get_query_var( 'paged' ) ),
             'format'       => '?paged=%#%',
-            'show_all'     => true,
+            'show_all'     => false,
             'type'         => 'plain',
             'end_size'     => 2,
-            'mid_size'     => 1,
+            'mid_size'     => 2,
             'prev_next'    => true,
             'prev_text'    => sprintf( '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
@@ -41,4 +44,5 @@
         endif;
         ?>
     </div>
+    <?php endif;?>
 </div>

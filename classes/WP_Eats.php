@@ -55,8 +55,38 @@ class WP_Eats
 
     }
     static function parse_invoices_list_request($request): array {
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
         $args = array();
-        $args['posts_per_page'] = 2;
+        $args['posts_per_page'] = 12;
+        $args['paged'] = $paged;
+        $args['meta_query'] = array(
+            "relation" => "AND"
+        );
+        if (!empty($request['invoice-status']) && $request['invoice-status'] != "all") {
+            $args['meta_query']['invoice_status_clause'] = array(
+                'key' => 'invoice-status',
+                'value' => $request['invoice-status'],
+            );
+        }
+        if (!empty($request['search-name'])) {
+            // TODO search by what? Invoice name? Restaurant Name? Client Data?
+            //$args['title'] = $request['search-name'];
+        }
+        /*
+        if (!empty($request['date-from']) && !empty($request['date-to'])) {
+            if (strtotime($request['date-from']) && strtotime($request['date-to'])) {
+                $date_from = strtotime($request['date-from']);
+                $date_to = strtotime($request['date-to']);
+                $args['meta_query']['date_clause'] = array(
+                    'key' => 'start-date',
+                    'type'    => 'NUMERIC',
+                    'compare' => 'BETWEEN',
+                    'value' => array($date_from, $date_to),
+                );
+            }
+
+        }*/
+
         return $args;
     }
     static function get_format_date(): string {
@@ -65,5 +95,18 @@ class WP_Eats
     }
     static function format_price(string $price): string {
         return $price . self::get_currency();
+    }
+    static function parse_invoices_action($request) {
+        if (isset($request['action'])) {
+            if ($request['action'] == "mark-as-paid") {
+                if (wp_verify_nonce($request["wp_eats_nonce"], 'mark-as-paid') && is_array($request['posts'])) {
+                    foreach ($request['posts'] as $post_id) {
+                        $invoice = new Invoice($post_id);
+                        $invoice->set_invoice_status('paid');
+                    }
+                };
+            }
+
+        }
     }
 }

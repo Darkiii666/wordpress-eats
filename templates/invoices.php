@@ -1,6 +1,6 @@
 <?php use wp_eats\Invoice;
 use wp_eats\WP_Eats;
-
+WP_Eats::parse_invoices_action($_REQUEST);
 include "parts/header.php";?>
 
 <main class="wp-eats__content wp-eats__content--invoices-list">
@@ -8,11 +8,10 @@ include "parts/header.php";?>
     <div class="wp-eats__title-wrap">
         <h1 class="wp-eats__title"><?php echo get_the_title()?></h1>
     </div>
-    <form action="" method="GET">
-        <?php wp_nonce_field( 'wp_eats_invoice_list', 'wp_eats_nonce' );
+    <form action="" class="wp_eats__list-from" method="GET">
+        <?php wp_nonce_field( 'mark-as-paid', 'wp_eats_nonce' );
         include "parts/invoice-filters.php";
         ?>
-
 
         <div class="wp-eats__list wp-eats__list--invoices">
             <table class="table">
@@ -40,6 +39,7 @@ include "parts/header.php";?>
                     else $invoice_args = array();
                     $invoices_query = WP_Eats::get_invoice_list($invoice_args);
                     $invoices = $invoices_query->posts;
+                    if ($invoices_query->have_posts()):
                     foreach ($invoices as $invoice):
                         $invoice = new Invoice($invoice);
                         $dates = $invoice->get_invoice_dates(WP_Eats::get_format_date());
@@ -68,11 +68,17 @@ include "parts/header.php";?>
                                     <path fill="#ff9500" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
                                 </svg></a></td>
                     </tr>
-                    <?php endforeach;?>
+                    <?php
+                    endforeach;
+                    else:?>
+
+                        <tr><td colspan="15" class="wp-eats__table-data"><?php _e("No Invoices Found", "wp-eats")?></td></tr>
+
+                    <?php endif;?>
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td colspan="15">
+                    <td colspan="15" class="wp-eats__table-data text-center">
                         <?php include "parts/invoice-table-footer.php";?>
 
                     </td>

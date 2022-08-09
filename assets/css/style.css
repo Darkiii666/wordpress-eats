@@ -145,6 +145,10 @@ select {
   line-height: 1.2;
   font-weight: 400;
 }
+.wp-eats__filters input:focus {
+  border-color: #ced4da;
+  box-shadow: none;
+}
 .wp-eats__filters .wp-eats__status-filter label {
   color: #6c7481;
   text-transform: uppercase;
@@ -154,7 +158,10 @@ select {
   color: #fff;
 }
 .wp-eats__filters .wp-eats__date-filters {
-  min-width: 325px;
+  min-width: 340px;
+}
+.wp-eats__filters .wp-eats__search-filter {
+  min-width: 310px;
 }
 .wp-eats__filters .button.button--mark-as-paid {
   background: #ff9600;
@@ -218,6 +225,10 @@ select {
 }
 .wp-eats__list tbody tr .wp-eats__table-data .wp-eats__status-name.wp-eats__status-name--verified {
   background: #48c293;
+  color: #fff;
+}
+.wp-eats__list tbody tr .wp-eats__table-data .wp-eats__status-name.wp-eats__status-name--paid {
+  background: #48b4c2;
   color: #fff;
 }
 .wp-eats__list tfoot tr {

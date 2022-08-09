@@ -8,12 +8,17 @@ class Invoice
     private array $statuses;
     public string $status_name;
     public string $status_code;
-    static function get_invoice_statuses(): array {
-        return array(
+    static function get_invoice_statuses($context = "view"): array {
+        $statuses = array(
             "ongoing" => __("Ongoing", "wp-eats"),
             "pending" => __("Pending", "wp-eats"),
             "verified" => __("Verified", "wp-eats"),
+
         );
+        if($context == "view") {
+            $statuses["paid"] = __("Paid", "wp-eats");
+        }
+        return $statuses;
     }
     public function get_invoice_status(): string {
         return $this->status_code;
@@ -93,12 +98,12 @@ class Invoice
     public function __construct(\WP_Post | int $post) {
         if ($post instanceof \WP_Post) {
             $this->post = $post;
-        } else {
+        } elseif (is_numeric($post)) {
             $this->post = get_post($post);
-        }
+        } else return null;
         if ($this->post->post_type == "eats-invoice") {
             $this->statuses = self::get_invoice_statuses();
-            $this->ID = $post->ID;
+            $this->ID = $this->post->ID;
             $this->status_code = get_post_meta($this->post->ID, 'invoice-status', true);
             if (empty($this->status_code)) {
                 $this->status_code = array_key_first($this->statuses);
