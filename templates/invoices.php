@@ -9,7 +9,7 @@ include "parts/header.php";?>
         <h1 class="wp-eats__title"><?php echo get_the_title()?></h1>
     </div>
     <form action="" class="wp_eats__list-from" method="GET">
-        <?php wp_nonce_field( 'mark-as-paid', 'wp_eats_nonce' );
+        <?php //wp_nonce_field( 'mark-as-paid', 'wp_eats_nonce' );
         include "parts/invoice-filters.php";
         ?>
 

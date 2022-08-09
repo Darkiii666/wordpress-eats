@@ -69,8 +69,7 @@ class WP_Eats
             );
         }
         if (!empty($request['search-name'])) {
-            // TODO search by what? Invoice name? Restaurant Name? Client Data?
-            //$args['title'] = $request['search-name'];
+            $args['s'] = $request['search-name'];
         }
         /*
         if (!empty($request['date-from']) && !empty($request['date-to'])) {
@@ -96,10 +95,14 @@ class WP_Eats
     static function format_price(string $price): string {
         return $price . self::get_currency();
     }
-    static function parse_invoices_action($request) {
+    static function parse_invoices_action($request): void
+    {
+        foreach ($_REQUEST as $key => $value) {
+            if (empty($value)) unset($_REQUEST['key']);
+        }
         if (isset($request['action'])) {
             if ($request['action'] == "mark-as-paid") {
-                if (wp_verify_nonce($request["wp_eats_nonce"], 'mark-as-paid') && is_array($request['posts'])) {
+                if (/*wp_verify_nonce($request["wp_eats_nonce"], 'mark-as-paid') &&*/ @is_array($request['posts'])) {
                     foreach ($request['posts'] as $post_id) {
                         $invoice = new Invoice($post_id);
                         $invoice->set_invoice_status('paid');

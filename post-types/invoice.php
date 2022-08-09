@@ -6,6 +6,7 @@ function register_invoice_post_type(): void
 {
     $supports = array(
         'title',
+        'editor'
     );
 
     $labels = array(

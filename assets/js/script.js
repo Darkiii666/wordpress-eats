@@ -18,4 +18,9 @@ document.querySelectorAll('.wp_eats__list-from').forEach((form) => {
             form.submit();
         })
     })
+    form.querySelectorAll('.wp-eats__status-filters .btn-check').forEach((button)=>{
+        button.addEventListener('change', (event)=>{
+            form.submit();
+        })
+    })
 })
